@@ -1,9 +1,10 @@
 //This code plots an involute spur gear.
 //INPUT
-n=15;//number of teeth
-d=100;//pitch diamter
+n=8;//number of teeth
+d=50;//pitch diamter
 phi_d=20;//pressure angle in degrees
 r_fillet=0.05;//radius of fillet
+thick=10;//gear thickness
 //------------------------------------
 pd=n/d;//diametral pitch
 phi=phi_d*%pi/180;//pressure angle in radians
@@ -12,10 +13,8 @@ d0=d+2/pd;//addendum diameter
 tt=%pi/(2*pd);//tooth thickness at the pitch circle
 dr=d-2*1.25/pd;//dedendum diameter
 //-------------------------------------
-n1=10;
-n2=5;
-n3=3;
-n4=n1+(3*n2)+n3;
+n1=10;n2=5;n3=3;n4=n1+(3*n2)+n3;
+z=1:n4;
 xp=zeros(n1,1);yp=zeros(n1,1);
 xo=zeros(n2,1);yo=zeros(n2,1);
 xr=zeros(n3,1);yr=zeros(n3,1);
@@ -57,7 +56,7 @@ xr=xr';yr=yr';
 for i=1:n2;
    thetar=theta0+(%pi/n-theta0)*(i-1)/(n2-1);
    xro(i)=dr*sin(thetar)/2;
-    yro(i)=dr*cos(thetar)/2;
+   yro(i)=dr*cos(thetar)/2;
 end
 xro=xro';yro=yro';
 //------------------------------------------------------
@@ -89,9 +88,12 @@ for i=1:n;
     M=[M,mm];
 end
 M=[M,h(:,1)];
+isoview;
 //plot one-half tooth, the involute curve part is red
 plot (g(1,:),g(2,:),'-.b',xp,yp,'-r', 'linewidth',4);
 //plot the whole gear
 plot (M(1,:),M(2,:));
-isoview
 M=M';
+[X,Y]=meshgrid(M'(1,:),M'(2,:));
+mesh(X,Y);
+write("data.txt",M);
